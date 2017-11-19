@@ -18,7 +18,7 @@ dva.js for mini wechat |  小程序版的Dva.js
     
 * **connect如何使用？** 
 > 在需要用到`store`数据的组件/页面使用`connect`来连接`store`中的`state`，`connect`只接受传入`mapStateToProps`一个参数
-* **页面初始化如果调用dispatch获取数据？** 
+* **页面初始化如何调用dispatch获取数据？** 
 > 页面的`onLoad`,`onShow`,`onReady`生命周期函数不能调用`dispatch`，意味着您要在`model`内的`subscriptions`中用`history.listen`来监听来实现，这也符合Dva的设计规范
 * **如何监听路由？** 
 > 我对`history.listen`的传入参数进行了调整，目前传入的参数是`{ pathname, query, isBack }`，分别代表`当前路由路径(以/开头)`、`路由携带参数 Object类型`、`是否是从上一个页面返回 Boolean类型`，其他的如果有特殊需要请自行参考源码进行调整或者反馈给我，谢谢。
