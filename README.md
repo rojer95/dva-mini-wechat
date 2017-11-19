@@ -7,7 +7,7 @@ dva.js for mini wechat |  小程序版的Dva.js
 * [Dva.JS的中文文档](https://github.com/dvajs/dva/blob/master/README_zh-CN.md)
 * 理解 dva 的 [8 个概念](https://github.com/dvajs/dva/blob/master/docs/Concepts_zh-CN.md) ，以及他们是如何串起来的
 * 掌握 dva 的[所有 API](https://github.com/dvajs/dva/blob/master/docs/API_zh-CN.md)
-
+* 以上文档请忽略Route部分，因为小程序路由和React的路由还是不一样的
 
 ## 一些特殊之处
 
