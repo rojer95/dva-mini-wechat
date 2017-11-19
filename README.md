@@ -27,7 +27,7 @@ dva.js for mini wechat |  小程序版的Dva.js
 * **如何页面跳转？** 
 > 关于路由的跳转：可以使用`this.dispatch(routerRedux({...}))`，也可以使用`wx.navigateTo`，这里`routerRedux`等价于`wx.navigateTo`，但不等价于`wx.redirectTo`等其他路由跳转的接口；如需要获取当前页面的路由信息，可以获取我已经预定义好的model，名称为`@@route`
 * **dispatch如何调用？** 
-> `dispatch`在使用`content`函数初始化过的页面，均会传入的`dispatch`，其他函数（`onLoad`,`onShow`,`onReady`生命周期函数以外）使用`this.dispatch`来调用，传入参数与Dva一致
+> `dispatch`在使用`connect`函数初始化过的页面，均会传入的`dispatch`，其他函数（`onLoad`,`onShow`,`onReady`生命周期函数以外）使用`this.dispatch`来调用，传入参数与Dva一致
 * **如何优雅的调用微信的接口？** 
 > 参考了[labrador](https://github.com/maichong/labrador) 库对全局的 wx 变量进行了封装为`_wx`，将所有 wx 对象中的异步方法进行了Promise支持， 除了同步的方法，这些方法往往以 on*、create*、stop*、pause*、close* 开头或以 *Sync 结尾，这样在`model`的`effects`中。你可以直接使用`yield _wx.login()`的方法来“同步”的获取数据
 * **事件获取传入参数有没有更简便的方法？** 使用`getNodeAttr` 
