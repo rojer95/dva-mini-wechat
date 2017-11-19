@@ -30,8 +30,8 @@ dva.js for mini wechat |  小程序版的Dva.js
 > `dispatch`在使用`connect`函数初始化过的页面，均会传入的`dispatch`，其他函数（`onLoad`,`onShow`,`onReady`生命周期函数以外）使用`this.dispatch`来调用，传入参数与Dva一致
 * **如何优雅的调用微信的接口？** 
 > 参考了[labrador](https://github.com/maichong/labrador) 库对全局的 wx 变量进行了封装为`_wx`，将所有 wx 对象中的异步方法进行了Promise支持， 除了同步的方法，这些方法往往以 on*、create*、stop*、pause*、close* 开头或以 *Sync 结尾，这样在`model`的`effects`中。你可以直接使用`yield _wx.login()`的方法来“同步”的获取数据
-* **事件获取传入参数有没有更简便的方法？** 使用`getNodeAttr` 
-> 可以用于获取事件中WXML节点的`data-`参数
+* **事件获取传入参数有没有更简便的方法？** 
+> 使用`getNodeAttr` 可以用于获取事件中WXML节点的`data-`参数
 
 > 目前所能想到的就这些，以上所提到的均有在Demo中有体现，可自行查阅，其他的待补充，欢迎提议
 
