@@ -14,24 +14,24 @@ dva.js for mini wechat |  小程序版的Dva.js
 以下能帮你更好地理解和使用 小程序版本的 dva ：
 
 * **creatApp如何使用？** 
-> 必须在`app.js`入口文件，使用`creatApp`来创建`store`
-    
+> 必须在`app.js`入口文件，使用`creatApp`来创建`store`，同时请在配置中传入`models`的数组来初始化model。
 * **connect如何使用？** 
 > 在需要用到`store`数据的组件/页面使用`connect`来连接`store`中的`state`，`connect`只接受传入`mapStateToProps`一个参数
 * **页面初始化如何调用dispatch获取数据？** 
-> 页面的`onLoad`,`onShow`,`onReady`生命周期函数不能调用`dispatch`，意味着您要在`model`内的`subscriptions`中用`history.listen`来监听来实现，这也符合Dva的设计规范
-* **如何监听路由？** 
+> 页面的`onLoad`,`onShow`,`onReady`生命周期函数中可以直接调用`this.dispatch`，但更建议您在`model`内的`subscriptions`中用`history.listen`来监听来实现，这也符合Dva的设计规范
+* **监听路由如何使用？** 
 > 我对`history.listen`的传入参数进行了调整，目前传入的参数是`{ pathname, query, isBack }`，分别代表`当前路由路径(以/开头)`、`路由携带参数 Object类型`、`是否是从上一个页面返回 Boolean类型`，其他的如果有特殊需要请自行参考源码进行调整或者反馈给我，谢谢。
 * **为何models与services报regeneratorRuntime undefined错误？** 
 > 由于微信小程序不支持`regeneratorRuntime`，所以在`models`与`services`内请记得引用`regeneratorRuntime`
 * **如何页面跳转？** 
 > 关于路由的跳转：可以使用`this.dispatch(routerRedux({...}))`，也可以使用`wx.navigateTo`，这里`routerRedux`等价于`wx.navigateTo`，但不等价于`wx.redirectTo`等其他路由跳转的接口；如需要获取当前页面的路由信息，可以获取我已经预定义好的model，名称为`@@route`
 * **dispatch如何调用？** 
-> `dispatch`在使用`connect`函数初始化过的页面，均会传入的`dispatch`，其他函数（`onLoad`,`onShow`,`onReady`生命周期函数以外）使用`this.dispatch`来调用，传入参数与Dva一致
+> `dispatch`在使用`connect`函数初始化过的页面，均会传入的`dispatch`，使用`this.dispatch`来调用，传入参数与Dva一致
 * **如何优雅的调用微信的接口？** 
 > 参考了[labrador](https://github.com/maichong/labrador) 库对全局的 wx 变量进行了封装为`_wx`，将所有 wx 对象中的异步方法进行了Promise支持， 除了同步的方法，这些方法往往以 on*、create*、stop*、pause*、close* 开头或以 *Sync 结尾，这样在`model`的`effects`中。你可以直接使用`yield _wx.login()`的方法来“同步”的获取数据
 * **事件获取传入参数有没有更简便的方法？** 
 > 使用`getNodeAttr` 可以用于获取事件中WXML节点的`data-`参数
+
 
 > 目前所能想到的就这些，以上所提到的均有在Demo中有体现，可自行查阅，其他的待补充，欢迎提议
 

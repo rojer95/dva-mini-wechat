@@ -9,8 +9,9 @@ const connect = (mapStateToProps) => {
     const watchMap = mapStateToProps(state);
 
     return (opts) => {
-        const onLoad = opts.onLoad;
-        const onShow = opts.onShow;
+
+        const onLoad = opts.onLoad || function(options){};
+        const onShow = opts.onShow || function(){};
 
 
         opts.onLoad = function (options) {
@@ -22,15 +23,17 @@ const connect = (mapStateToProps) => {
 
                 page.setData(newData);
             };
-
-            onLoad(options, app._store.dispatch)
+            const _onLoad = onLoad.bind(page);
+            _onLoad(options)
         }
 
         opts.onShow = function () {
             global._routing_ = false;
             const app = getApp()._dva_app_;
             app._history._handler();
-            onShow()
+
+            const _onShow = onShow.bind(this);
+            _onShow()
         }
 
         return {
@@ -190,6 +193,7 @@ const routerRedux = ({ pathname, query }) => {
         }
     };
 }
+
 /**
  * 这段代码复制来自
  * https://github.com/maichong/labrador/blob/ed416658f1ab5395e81a847b6255d47857a39410/index.js#L55
