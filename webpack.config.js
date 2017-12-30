@@ -49,7 +49,7 @@ module.exports = {
     },
 
     plugins: [
-        new webpack.NoErrorsPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
 
         // 通常会需要区分dev和production, 建议定义这个变量
         // 编译后会在global中定义`process.env`这个Object

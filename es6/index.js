@@ -1,7 +1,6 @@
 import * as dva from 'dva-core';
 import regenerator from 'regenerator-runtime';
-import _set from 'lodash/set';
-import _get from 'lodash/get';
+import diff from 'deep-diff';
 
 const connect = (mapStateToProps) => {
     const app = getApp()
@@ -13,16 +12,77 @@ const connect = (mapStateToProps) => {
         const onLoad = opts.onLoad || function(options){};
         const onShow = opts.onShow || function(){};
 
-
+    
         opts.onLoad = function (options) {
             const page = this;
             page._watchMap = Object.keys(watchMap);
             page._query = options;
            
-            page._updateData = function (newData) {
+            page._updateData = function (originData, newData, key) {
+                const delta = diff(originData, newData);
+                const diffData = {};
 
-                page.setData(newData);
+                const getByDot = (data, path) => {
+                    const paths = path.split('.');
+                    let result = null;
+                    for(let _ of paths){
+                        const check = result === null ? data : result;
+                        if(Object.prototype.hasOwnProperty.call(check, _)){
+                            result = data[_];
+                        } else {
+                            return result;
+                        }
+                    }
+
+                    return result;
+                }
+                if (Array.isArray(delta)) {
+                    delta.map(item => {
+                        if(item.kind === 'D') {
+                            if ( item.path.length > 1) {
+                                item.path.splice(item.path.length - 1, 1);
+                                diffData[`${key}.${item.path.join('.')}`] = getByDot(newData, item.path.join('.'));
+                            }
+                        } else if (item.kind === 'N'){
+                            diffData[`${key}.${item.path.join('.')}`] = item.rhs;
+                        } else if (item.kind === 'E') {
+                            let paths = [];
+                            for(let path of item.path){
+
+                                if( typeof path === 'number' ){
+                                    diffData[`${key}.${paths.join('.')}`] = getByDot(newData, paths.join('.'));;
+                                    continue;
+                                }
+                                
+                                paths.push(path);
+                            }
+
+                            diffData[`${key}.${paths.join('.')}`] = item.rhs;
+
+                        } else if (item.kind === 'A'){
+                            // 数组直接替换
+                            let paths = [];
+                            for(let path of item.path){
+
+                                if( typeof path === 'number' ){
+                                    diffData[`${key}.${paths.join('.')}`] = getByDot(newData, paths.join('.'));;
+                                    continue;
+                                }
+                                
+                                paths.push(path);
+                            }
+
+                            diffData[`${key}.${item.path.join('.')}`] = getByDot(newData, paths.join('.'));
+                        }
+    
+                    })
+                    // console.log(diffData);
+                    page.setData(diffData);
+                }
+
+                
             };
+
             const _onLoad = onLoad.bind(page);
             _onLoad(options)
         }
@@ -35,11 +95,12 @@ const connect = (mapStateToProps) => {
             const _onShow = onShow.bind(this);
             _onShow()
         }
-
+        
         return {
             ...opts,
             data: {
-                ...watchMap
+                ...watchMap,
+                ...opts.data,
             },
             dispatch: app._store.dispatch
         }
@@ -104,15 +165,17 @@ const creatApp = (opts) => {
                 if (page._watchMap && page._updateData) {
                     page._watchMap.forEach((key) => {
                         if (state[key]) {
-                            const upData = {};
-                            upData[key] = state[key];
-                            page._updateData(upData)
+                            if(!Object.prototype.hasOwnProperty.call(page.data, key)){
+                                page.data[key] = {};
+                            }
+                            page._updateData(page.data[key] ,state[key], key)
                         }
 
                     })
                 }
             })
-        }
+        },
+        ...opts.dvaHooks
     });
 
     app._history = history;
@@ -151,6 +214,9 @@ const request = (opts) => {
 
     return new Promise((resolve, reject) => {
         opts.success = ({ data, statusCode, header }) => {
+            if( statusCode < 200 || statusCode >= 300){
+                reject({ data, statusCode, header })
+            }
             resolve({ data, statusCode, header })
         }
 
@@ -165,7 +231,10 @@ const request = (opts) => {
 
 const getNodeAttr = (e, name) => {
     // console.log(e)
-    if (e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset[name]) {
+    if (Object.prototype.hasOwnProperty.call(e,'currentTarget') &&
+        Object.prototype.hasOwnProperty.call(e.currentTarget,'dataset') &&
+        Object.prototype.hasOwnProperty.call(e.currentTarget.dataset,name)
+    ) {
         return e.currentTarget.dataset[name];
     }
     return undefined;
