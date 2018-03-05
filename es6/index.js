@@ -32,7 +32,7 @@ const connect = (mapStateToProps) => {
                             return result;
                         }
                     }
-                    console.log(result);
+                    // console.log(result);
                     return result;
                 }
                 if (Array.isArray(delta)) {
