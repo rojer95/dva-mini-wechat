@@ -21,19 +21,18 @@ const connect = (mapStateToProps) => {
             page._updateData = function (originData, newData, key) {
                 const delta = diff(originData, newData);
                 const diffData = {};
-
                 const getByDot = (data, path) => {
                     const paths = path.split('.');
                     let result = null;
                     for(let _ of paths){
                         const check = result === null ? data : result;
                         if(Object.prototype.hasOwnProperty.call(check, _)){
-                            result = data[_];
+                          result = check[_];
                         } else {
                             return result;
                         }
                     }
-
+                    console.log(result);
                     return result;
                 }
                 if (Array.isArray(delta)) {
@@ -57,7 +56,9 @@ const connect = (mapStateToProps) => {
                                 paths.push(path);
                             }
 
-                            diffData[`${key}.${paths.join('.')}`] = item.rhs;
+                            if (paths.length === item.path.length) {
+                              diffData[`${key}.${paths.join('.')}`] = item.rhs;
+                            }
 
                         } else if (item.kind === 'A'){
                             // 数组直接替换
@@ -72,7 +73,10 @@ const connect = (mapStateToProps) => {
                                 paths.push(path);
                             }
 
-                            diffData[`${key}.${item.path.join('.')}`] = getByDot(newData, paths.join('.'));
+                            if (paths.length === item.path.length) {
+                              diffData[`${key}.${item.path.join('.')}`] = getByDot(newData, paths.join('.'));
+                            }
+                            
                         }
     
                     })
