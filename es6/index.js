@@ -18,7 +18,7 @@ const connect = (mapStateToProps) => {
             page._watchMap = Object.keys(watchMap);
             page._query = options;
            
-            page._updateData = function (originData, newData, key) {
+            page._updateData = function (originData, newData, key, debug = false) {
                 const delta = diff(originData, newData);
                 const diffData = {};
                 const getByDot = (data, path) => {
@@ -37,50 +37,62 @@ const connect = (mapStateToProps) => {
                 }
                 if (Array.isArray(delta)) {
                     delta.map(item => {
-                        if(item.kind === 'D') {
-                            if ( item.path.length > 1) {
-                                item.path.splice(item.path.length - 1, 1);
-                                diffData[`${key}.${item.path.join('.')}`] = getByDot(newData, item.path.join('.'));
-                            }
-                        } else if (item.kind === 'N'){
-                            diffData[`${key}.${item.path.join('.')}`] = item.rhs;
-                        } else if (item.kind === 'E') {
-                            let paths = [];
-                            for(let path of item.path){
-
-                                if( typeof path === 'number' ){
-                                    diffData[`${key}.${paths.join('.')}`] = getByDot(newData, paths.join('.'));;
-                                    continue;
-                                }
-                                
-                                paths.push(path);
-                            }
-
-                            if (paths.length === item.path.length) {
-                              diffData[`${key}.${paths.join('.')}`] = item.rhs;
-                            }
-
-                        } else if (item.kind === 'A'){
-                            // 数组直接替换
-                            let paths = [];
-                            for(let path of item.path){
-
-                                if( typeof path === 'number' ){
-                                    diffData[`${key}.${paths.join('.')}`] = getByDot(newData, paths.join('.'));;
-                                    continue;
-                                }
-                                
-                                paths.push(path);
-                            }
-
-                            if (paths.length === item.path.length) {
-                              diffData[`${key}.${item.path.join('.')}`] = getByDot(newData, paths.join('.'));
-                            }
-                            
+                        let keys = ''
+                        if (item.path.length >= 2) {
+                            keys = item.path.slice(0, 1).join('.');
+                        } else {
+                            keys = item.path[0];
                         }
+                        diffData[`${key}.${keys}`] = getByDot(newData, keys);
+
+                //         if(item.kind === 'D') {
+                //             if ( item.path.length > 1) {
+                //                 item.path.splice(item.path.length - 1, 1);
+                //                 diffData[`${key}.${item.path.join('.')}`] = getByDot(newData, item.path.join('.'));
+                //             }
+                //         } else if (item.kind === 'N'){
+                //             diffData[`${key}.${item.path.join('.')}`] = item.rhs;
+                //         } else if (item.kind === 'E') {
+                //             let paths = [];
+                //             for(let path of item.path){
+
+                //                 if( typeof path === 'number' ){
+                //                     diffData[`${key}.${paths.join('.')}`] = getByDot(newData, paths.join('.'));;
+                //                     continue;
+                //                 }
+                                
+                //                 paths.push(path);
+                //             }
+
+                //             if (paths.length === item.path.length) {
+                //               diffData[`${key}.${paths.join('.')}`] = item.rhs;
+                //             }
+
+                //         } else if (item.kind === 'A'){
+                //             // 数组直接替换
+                //             let paths = [];
+                //             for(let path of item.path){
+
+                //                 if( typeof path === 'number' ){
+                //                     diffData[`${key}.${paths.join('.')}`] = getByDot(newData, paths.join('.'));;
+                //                     continue;
+                //                 }
+                                
+                //                 paths.push(path);
+                //             }
+
+                //             if (paths.length === item.path.length) {
+                //               diffData[`${key}.${item.path.join('.')}`] = getByDot(newData, paths.join('.'));
+                //             }
+                            
+                //         }
     
                     })
-                    // console.log(diffData);
+
+                    if (debug) {
+                        console.log(diffData);
+                    }
+
                     page.setData(diffData);
                 }
 
@@ -172,7 +184,7 @@ const creatApp = (opts) => {
                             if(!Object.prototype.hasOwnProperty.call(page.data, key)){
                                 page.data[key] = {};
                             }
-                            page._updateData(page.data[key] ,state[key], key)
+                            page._updateData(page.data[key] ,state[key], key, opts.debug)
                         }
 
                     })
