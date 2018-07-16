@@ -39,7 +39,7 @@ dva.js for mini wechat |  小程序版的Dva.js
 
 ## Demos
 
-* [Demo]~~(https://github.com/rojer95/dva-mini-wechat-demo)~~，简单计数器&斗鱼接口，调用Demo已经迁移到本项目的Demo目录下
+* ~~[https://github.com/rojer95/dva-mini-wechat-demo](https://github.com/rojer95/dva-mini-wechat-demo)~~，简单计数器&斗鱼接口，调用Demo已经迁移到本项目的`Demo`目录下
 
 
 ## 快速上手DEMO
