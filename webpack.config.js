@@ -8,7 +8,7 @@ var jsLoader = {
         presets: ["es2015", "stage-0"]
     },
     // 指定转译es6目录下的代码
-    include: path.join(__dirname, 'es6'),
+    include: path.join(__dirname, 'src'),
     // 指定不转译node_modules下的代码
     exclude: path.join(__dirname, 'node_modules')
 }
@@ -17,8 +17,8 @@ module.exports = {
     // sourcemap 选项, 建议开发时包含sourcemap, production版本时去掉(节能减排)
     devtool: false,
 
-    // 指定es6目录为context目录, 这样在下面的entry, output部分就可以少些几个`../`了
-    context: path.join(__dirname, 'es6'),
+    // 指定src目录为context目录, 这样在下面的entry, output部分就可以少些几个`../`了
+    context: path.join(__dirname, 'src'),
 
     // 定义要打包的文件
     // 比如: `{entry: {out: ['./x', './y','./z']}}` 的意思是: 将x,y,z等这些文件打包成一个文件,取名为: out
@@ -29,7 +29,7 @@ module.exports = {
 
     output: {
         // 将打包后的文件输出到lib目录
-        path: path.join(__dirname, 'src/lib'),
+        path: path.join(__dirname, './demo/lib'),
 
         // 将打包后的文件命名为 myapp, `[name]`可以理解为模板变量
         filename: '[name].js',

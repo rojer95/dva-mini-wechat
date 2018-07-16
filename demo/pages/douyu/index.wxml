@@ -1,0 +1,9 @@
+<!--pages/douyu/index.wxml-->
+<scroll-view style="height: 100%;" scroll-y bindscrolltolower="lower">
+  <view wx:for="{{douyu.roomList}}" wx:key="{{item.room_id}}" data-room-id="{{item.room_id}}" bindtap='enterRoom'>
+    <image style="width:370rpx;height:300rpx;" src="{{item.room_src}}"></image>
+    <view>
+    {{item.room_name}}[{{item.room_id}}]
+    </view>
+  </view>
+</scroll-view>

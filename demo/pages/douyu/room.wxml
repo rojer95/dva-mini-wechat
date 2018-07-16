@@ -1,0 +1,7 @@
+<image style="width:750rpx;height:450rpx" src="{{douyu.roomDetail.room_thumb}}"></image>
+<view>【{{douyu.roomDetail.room_status == '1' ? '正在直播' : '不在直播'}}】{{douyu.roomDetail.room_name}}</view>
+<view><image style="width:50rpx;height:50rpx" src="{{douyu.roomDetail.avatar}}"></image> {{douyu.roomDetail.owner_name}} | 人气：{{douyu.roomDetail.online}} </view>
+
+
+<button bindtap='plus'>加一</button>
+<button bindtap='minus'>减一</button>

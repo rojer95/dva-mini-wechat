@@ -13,23 +13,23 @@ dva.js for mini wechat |  小程序版的Dva.js
 
 以下能帮你更好地理解和使用 小程序版本的 dva ：
 
-* **creatApp如何使用？** 
+* **creatApp如何使用？**
 > 必须在`app.js`入口文件，使用`creatApp`来创建`store`，同时请在配置中传入`models`的数组来初始化model。
-* **connect如何使用？** 
+* **connect如何使用？**
 > 在需要用到`store`数据的组件/页面使用`connect`来连接`store`中的`state`，`connect`只接受传入`mapStateToProps`一个参数
-* **页面初始化如何调用dispatch获取数据？** 
+* **页面初始化如何调用dispatch获取数据？**
 > 页面的`onLoad`,`onShow`,`onReady`生命周期函数中可以直接调用`this.dispatch`，但更建议您在`model`内的`subscriptions`中用`history.listen`来监听来实现，这也符合Dva的设计规范
-* **监听路由如何使用？** 
+* **监听路由如何使用？**
 > 我对`history.listen`的传入参数进行了调整，目前传入的参数是`{ pathname, query, isBack }`，分别代表`当前路由路径(以/开头)`、`路由携带参数 Object类型`、`是否是从上一个页面返回 Boolean类型`，其他的如果有特殊需要请自行参考源码进行调整或者反馈给我，谢谢。
-* **为何models与services报regeneratorRuntime undefined错误？** 
+* **为何models与services报regeneratorRuntime undefined错误？**
 > 由于微信小程序不支持`regeneratorRuntime`，所以在`models`与`services`内请记得引用`regeneratorRuntime`
-* **如何页面跳转？** 
+* **如何页面跳转？**
 > 关于路由的跳转：可以使用`this.dispatch(routerRedux({...}))`，也可以使用`wx.navigateTo`，这里`routerRedux`等价于`wx.navigateTo`，但不等价于`wx.redirectTo`等其他路由跳转的接口；如需要获取当前页面的路由信息，可以获取我已经预定义好的model，名称为`@@route`
-* **dispatch如何调用？** 
+* **dispatch如何调用？**
 > `dispatch`在使用`connect`函数初始化过的页面，均会传入的`dispatch`，使用`this.dispatch`来调用，传入参数与Dva一致
-* **如何优雅的调用微信的接口？** 
+* **如何优雅的调用微信的接口？**
 > 参考了[labrador](https://github.com/maichong/labrador) 库对全局的 wx 变量进行了封装为`_wx`，将所有 wx 对象中的异步方法进行了Promise支持， 除了同步的方法，这些方法往往以 on*、create*、stop*、pause*、close* 开头或以 *Sync 结尾，这样在`model`的`effects`中。你可以直接使用`yield _wx.login()`的方法来“同步”的获取数据
-* **事件获取传入参数有没有更简便的方法？** 
+* **事件获取传入参数有没有更简便的方法？**
 > 使用`getNodeAttr` 可以用于获取事件中WXML节点的`data-`参数
 
 
@@ -39,7 +39,7 @@ dva.js for mini wechat |  小程序版的Dva.js
 
 ## Demos
 
-* [Demo](https://github.com/rojer95/dva-mini-wechat-demo)，简单计数器&斗鱼接口调用
+* [Demo]~~(https://github.com/rojer95/dva-mini-wechat-demo)~~，简单计数器&斗鱼接口，调用Demo已经迁移到本项目的Demo目录下
 
 
 ## 快速上手DEMO
@@ -48,12 +48,12 @@ dva.js for mini wechat |  小程序版的Dva.js
 
 1. 克隆本项目 `git clone https://github.com/rojer95/dva-mini-wechat.git`
 2. `cd dva-mini-wechat`
-3. 安装依赖 `npm install`
-4. 克隆小程序的Demo到目录src下 `git clone https://github.com/rojer95/dva-mini-wechat-demo.git src`
-5. 在小程序IDE中打开src目录的项目
-6. 在`dva-mini-wechat`目录下运行命令`npm run build`编译依赖包，可以看到在`src\lib`目录下生成了`index.js`文件
+3. 安装依赖 `yarn install`
+4. ~~克隆小程序的Demo到目录src下 `git clone https://github.com/rojer95/dva-mini-wechat-demo.git src`~~
+5. 在小程序IDE中打开demo目录的项目
+6. 在`dva-mini-wechat`目录下运行命令`npm run build`编译依赖包，可以看到在`demo\lib`目录下生成了`index.js`文件
 7. 在小程序IDE编译并运行即可（必须开始ES6转ES5）
- 
+
 
 ### 关于测试与其他
 目前还没有写测试用例，以及性能方面的测试，后面有时间补上，欢迎各位提各种意见，感谢支持，谢谢。

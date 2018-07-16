@@ -1,0 +1,5 @@
+/* pages/douyu/index.wxss */
+
+page{
+  height: 100%;
+}
