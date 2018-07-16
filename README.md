@@ -63,7 +63,7 @@ dva.js for mini wechat |  小程序版的Dva.js
 3. 安装依赖 `yarn install`
 4. ~~克隆小程序的Demo到目录src下 `git clone https://github.com/rojer95/dva-mini-wechat-demo.git src`~~
 5. 在小程序IDE中打开demo目录的项目
-6. 在`dva-mini-wechat`目录下运行命令`npm run build`编译依赖包，可以看到在`demo\lib`目录下生成了`index.js`文件
+6. 在`dva-mini-wechat`目录下运行命令`yarn build`编译依赖包，可以看到在`demo\lib`目录下生成了`index.js`文件
 7. 在小程序IDE编译并运行即可（必须开始ES6转ES5）
 
 
